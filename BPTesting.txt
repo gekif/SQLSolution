@@ -1,0 +1,62 @@
+--DDL
+create table country
+(
+	name varchar(50)
+		constraint country_name_key
+			unique,
+	country varchar(50)
+)
+;
+
+create table trades
+(
+	id serial not null,
+	buyer varchar(50),
+	seller varchar(50),
+	value integer
+)
+;
+
+
+--DML
+/*For Country Table */
+INSERT INTO public.country (name, country) VALUES ('Marina', 'Indonesia');
+INSERT INTO public.country (name, country) VALUES ('Margarita', 'Malaysia');
+INSERT INTO public.country (name, country) VALUES ('Henya', 'Brunei');
+INSERT INTO public.country (name, country) VALUES ('Mukodimah', 'German');
+INSERT INTO public.country (name, country) VALUES ('Wak wau', 'Palembang');
+
+/*For Trable Table */
+INSERT INTO public.trades (id, buyer, seller, value) VALUES (1, 'Margarita', 'Henya', 180);
+INSERT INTO public.trades (id, buyer, seller, value) VALUES (2, 'Henya', 'Wak wau', 30);
+INSERT INTO public.trades (id, buyer, seller, value) VALUES (3, 'Margarita', 'Marina', 50);
+INSERT INTO public.trades (id, buyer, seller, value) VALUES (4, 'Wak wau', 'Mukodimah', 20);
+INSERT INTO public.trades (id, buyer, seller, value) VALUES (5, 'Margarita', 'Henya', 10);
+
+
+-- Query Result
+/* The result like, country | export | import */
+SELECT a.country, a.export, b.import FROM (
+  SELECT c.country, 
+    CASE
+      WHEN sum(t.value) ISNULL THEN '0'
+      ELSE sum(t.value)
+    END AS export
+  FROM country c LEFT JOIN trades t on c.name = t.seller
+  GROUP BY c.country
+  ORDER BY c.country ASC
+) AS a 
+
+INNER JOIN (
+  SELECT c.country, 
+    CASE
+      WHEN sum(t.value) ISNULL THEN '0'
+      ELSE sum(t.value)
+    END AS import
+  FROM country c LEFT JOIN trades t on c.name = t.buyer
+  GROUP BY c.country
+  ORDER BY c.country ASC
+) AS b
+
+ON a.country = b.country
+ORDER BY a.country ASC;
