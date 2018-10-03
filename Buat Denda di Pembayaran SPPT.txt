@@ -1,0 +1,41 @@
+CREATE FUNCTION denda() RETURNS TRIGGER AS $denda$
+BEGIN
+	UPDATE pembayaran_sppt SET denda_sppt = (
+		SELECT
+			CASE WHEN (sppt.tgl_jatuh_tempo_sppt < now()::timestamp without time zone) THEN
+				CASE
+					WHEN (date_part('year'::text, age(now()::timestamp without time zone, sppt.tgl_jatuh_tempo_sppt)) * 12::double precision) >= 24::double precision THEN round(24::double precision * 0.02 * sppt.pbb_yg_harus_dibayar_sppt::double precision)::double precision
+					WHEN (date_part('year'::text, age(now()::timestamp without time zone, sppt.tgl_jatuh_tempo_sppt)) * 12::double precision) >= 12::double precision THEN round((date_part('month'::text, age(now()::timestamp without time zone, sppt.tgl_jatuh_tempo_sppt))+ 1 + 12::double precision) * 0.02::double precision * sppt.pbb_yg_harus_dibayar_sppt::double precision)
+					WHEN (date_part('year'::text, age(now()::timestamp without time zone, sppt.tgl_jatuh_tempo_sppt)) * 12::double precision) < 12::double precision THEN round((date_part('month'::text, age(now()::timestamp without time zone, sppt.tgl_jatuh_tempo_sppt))+ 1::double precision)  * 0.02::double precision * sppt.pbb_yg_harus_dibayar_sppt::double precision)
+					ELSE '0'::double precision
+				END
+			END
+		FROM sppt
+		WHERE
+		 kd_propinsi = new.kd_propinsi AND
+		 kd_dati2 = new.kd_dati2 AND
+		 kd_kecamatan = new.kd_kecamatan AND
+		 kd_kelurahan = new.kd_kelurahan AND
+		 kd_blok = new.kd_blok AND
+		 no_urut = new.no_urut AND
+		 kd_jns_op = new.kd_jns_op AND
+		 thn_pajak_sppt = new.thn_pajak_sppt AND
+		 status_pembayaran_sppt = '0'
+	) WHERE
+	 kd_propinsi = new.kd_propinsi AND
+   kd_dati2 = new.kd_dati2 AND
+   kd_kecamatan = new.kd_kecamatan AND
+   kd_kelurahan = new.kd_kelurahan AND
+   kd_blok = new.kd_blok AND
+   no_urut = new.no_urut AND
+   kd_jns_op = new.kd_jns_op AND
+	 thn_pajak_sppt = new.thn_pajak_sppt
+;
+RETURN NULL;
+END;
+$denda$ LANGUAGE plpgsql;
+
+CREATE TRIGGER denda
+AFTER INSERT ON pembayaran_sppt
+FOR EACH ROW
+EXECUTE PROCEDURE denda();
