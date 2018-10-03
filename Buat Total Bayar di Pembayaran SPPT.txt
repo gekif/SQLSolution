@@ -1,0 +1,52 @@
+ALTER TABLE pembayaran_sppt DROP CONSTRAINT sys_c00507967;
+
+CREATE FUNCTION totalBayar() RETURNS TRIGGER AS $totalBayar$
+BEGIN
+	UPDATE pembayaran_sppt SET jml_sppt_yg_dibayar =
+	(denda_sppt + (
+		SELECT pbb_yg_harus_dibayar_sppt FROM sppt
+		WHERE
+		 kd_propinsi = new.kd_propinsi AND
+		 kd_dati2 = new.kd_dati2 AND
+		 kd_kecamatan = new.kd_kecamatan AND
+		 kd_kelurahan = new.kd_kelurahan AND
+		 kd_blok = new.kd_blok AND
+		 no_urut = new.no_urut AND
+		 kd_jns_op = new.kd_jns_op AND
+		 thn_pajak_sppt = new.thn_pajak_sppt AND
+		 status_pembayaran_sppt = '0'
+	))
+	WHERE
+			kd_propinsi = new.kd_propinsi AND
+		kd_dati2 = new.kd_dati2 AND
+		 kd_kecamatan = new.kd_kecamatan AND
+		 kd_kelurahan = new.kd_kelurahan AND
+		 kd_blok = new.kd_blok AND
+		 no_urut = new.no_urut AND
+		 kd_jns_op = new.kd_jns_op AND
+		 thn_pajak_sppt = new.thn_pajak_sppt
+;
+RETURN NULL;
+END;
+$totalBayar$ LANGUAGE plpgsql;
+
+CREATE TRIGGER totalBayar
+AFTER INSERT ON pembayaran_sppt
+FOR EACH ROW
+EXECUTE PROCEDURE totalBayar();
+
+
+--Testing
+SELECT pbb_yg_harus_dibayar_sppt FROM sppt
+		WHERE
+		 kd_propinsi = '82' AND
+		 kd_dati2 = '07' AND
+		 kd_kecamatan = '040' AND
+		 kd_kelurahan = '001' AND
+		 kd_blok = '001' AND
+		 no_urut = '0001' AND
+		 kd_jns_op = '0' AND
+		 thn_pajak_sppt = '2011' AND
+		 status_pembayaran_sppt = '0'
+;
+
