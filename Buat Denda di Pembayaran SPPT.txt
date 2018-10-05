@@ -96,5 +96,63 @@ WHERE
 	 thn_pajak_sppt = '2017'
 ;
 
-	 
+-- update set denda pada pembayaran SPPT
+CREATE FUNCTION denda() RETURNS TRIGGER AS $denda$
+BEGIN
+	UPDATE pembayaran_sppt SET denda_sppt = (
+	SELECT
+		CASE WHEN (psppt.tgl_pembayaran_sppt < sppt.tgl_jatuh_tempo_sppt::timestamp without time zone) THEN
+				CASE
+					WHEN (date_part('year'::text, age(sppt.tgl_jatuh_tempo_sppt::timestamp without time zone, psppt.tgl_pembayaran_sppt)) * 12::double precision) >= 24::double precision THEN round(24::double precision * 0.02 * sppt.pbb_yg_harus_dibayar_sppt::double precision)::double precision
+					WHEN (date_part('year'::text, age(sppt.tgl_jatuh_tempo_sppt::timestamp without time zone, psppt.tgl_pembayaran_sppt)) * 12::double precision) >= 12::double precision THEN round((date_part('month'::text, age(sppt.tgl_jatuh_tempo_sppt::timestamp without time zone, psppt.tgl_pembayaran_sppt))+ 1 + 12::double precision) * 0.02::double precision * sppt.pbb_yg_harus_dibayar_sppt::double precision)
+					ELSE '0'::double precision
+				END
+		END
+	FROM sppt sppt
+	INNER JOIN pembayaran_sppt psppt ON
+				sppt.kd_propinsi = psppt.kd_propinsi AND
+				sppt.kd_dati2 = psppt.kd_dati2 AND
+				sppt.kd_kecamatan = psppt.kd_kecamatan AND
+				sppt.kd_kelurahan = psppt.kd_kelurahan AND
+				sppt.kd_blok = psppt.kd_blok AND
+				sppt.no_urut = psppt.no_urut AND
+				sppt.kd_jns_op = psppt.kd_jns_op AND
+				sppt.thn_pajak_sppt = psppt.thn_pajak_sppt
+	WHERE
+			 sppt.kd_propinsi = new.kd_propinsi AND
+			 sppt.kd_dati2 = new.kd_dati2 AND
+			 sppt.kd_kecamatan = new.kd_kecamatan AND
+			 sppt.kd_kelurahan = new.kd_kelurahan AND
+			 sppt.kd_blok = new.kd_blok AND
+			 sppt.no_urut = new.no_urut AND
+			 sppt.kd_jns_op = new.kd_jns_op AND
+			 sppt.thn_pajak_sppt = new.thn_pajak_sppt AND
+			 sppt.status_pembayaran_sppt = '0'
+	)
+	WHERE
+		kd_propinsi = new.kd_propinsi AND
+		kd_dati2 = new.kd_dati2 AND
+		kd_kecamatan = new.kd_kecamatan AND
+		kd_kelurahan = new.kd_kelurahan AND
+		kd_blok = new.kd_blok AND
+		no_urut = new.no_urut AND
+		kd_jns_op = new.kd_jns_op AND
+		thn_pajak_sppt = new.thn_pajak_sppt
+;
+RETURN NULL;
+END;
+$denda$ LANGUAGE plpgsql;
 
+CREATE TRIGGER denda
+AFTER INSERT ON pembayaran_sppt
+FOR EACH ROW
+EXECUTE PROCEDURE denda();
+
+
+--Untuk testing argumen
+SELECT
+	CASE WHEN
+	'2017-09-06' < '2017-11-30' THEN 'True'
+ELSE 'False'
+		END
+;
