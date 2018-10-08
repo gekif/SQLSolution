@@ -101,7 +101,7 @@ CREATE FUNCTION denda() RETURNS TRIGGER AS $denda$
 BEGIN
 	UPDATE pembayaran_sppt SET denda_sppt = (
 	SELECT
-		CASE WHEN (psppt.tgl_pembayaran_sppt < sppt.tgl_jatuh_tempo_sppt::timestamp without time zone) THEN
+		CASE WHEN (psppt.tgl_pembayaran_sppt <= sppt.tgl_jatuh_tempo_sppt::timestamp without time zone) THEN
 				CASE
 					WHEN (date_part('year'::text, age(sppt.tgl_jatuh_tempo_sppt::timestamp without time zone, psppt.tgl_pembayaran_sppt)) * 12::double precision) >= 24::double precision THEN round(24::double precision * 0.02 * sppt.pbb_yg_harus_dibayar_sppt::double precision)::double precision
 					WHEN (date_part('year'::text, age(sppt.tgl_jatuh_tempo_sppt::timestamp without time zone, psppt.tgl_pembayaran_sppt)) * 12::double precision) >= 12::double precision THEN round((date_part('month'::text, age(sppt.tgl_jatuh_tempo_sppt::timestamp without time zone, psppt.tgl_pembayaran_sppt))+ 1 + 12::double precision) * 0.02::double precision * sppt.pbb_yg_harus_dibayar_sppt::double precision)

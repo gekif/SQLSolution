@@ -1,0 +1,22 @@
+create function updatestatusspptpembayaran() returns trigger
+LANGUAGE plpgsql
+AS $$
+DECLARE
+BEGIN
+    UPDATE sppt SET status_pembayaran_sppt = '1'
+    WHERE kd_propinsi = new.kd_propinsi AND 
+      kd_dati2 = new.kd_dati2 AND 
+      kd_kecamatan = new.kd_kecamatan AND 
+      kd_kelurahan = new.kd_kelurahan AND 
+      kd_blok = new.kd_blok AND 
+      no_urut = new.no_urut AND 
+      kd_jns_op = new.kd_jns_op AND
+      thn_pajak_sppt = new.thn_pajak_sppt;
+END;
+$$;
+
+
+CREATE TRIGGER updateStatusPembayaran
+AFTER INSERT ON pembayaran_sppt
+FOR EACH ROW 
+EXECUTE PROCEDURE updateStatusSpptPembayaran();

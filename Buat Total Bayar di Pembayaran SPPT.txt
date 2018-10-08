@@ -1,3 +1,5 @@
+ALTER TABLE pembayaran_sppt ADD CONSTRAINT sys_c00507967 CHECK (jml_sppt_yg_dibayar IS NOT NULL) NOT VALID;
+
 ALTER TABLE pembayaran_sppt DROP CONSTRAINT sys_c00507967;
 
 CREATE FUNCTION totalBayar() RETURNS TRIGGER AS $totalBayar$
