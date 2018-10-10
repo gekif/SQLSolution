@@ -12,6 +12,7 @@ BEGIN
       no_urut = new.no_urut AND 
       kd_jns_op = new.kd_jns_op AND
       thn_pajak_sppt = new.thn_pajak_sppt;
+RETURN NULL;
 END;
 $$;
 
