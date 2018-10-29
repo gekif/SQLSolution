@@ -1,0 +1,31 @@
+SELECT A.KD_PROPINSI||'.'||A.KD_DATI2||'.'||A.KD_KECAMATAN||'.'||A.KD_KELURAHAN||'.'||A.KD_BLOK||'-'||A.NO_URUT||'.'||A.KD_JNS_OP AS NOP,
+  A.STATUS_PEMBAYARAN_SPPT, A.THN_PAJAK_SPPT, B.TGL_PEMBAYARAN_SPPT, B.TGL_REKAM_BYR_SPPT
+FROM SPPT A
+INNER JOIN PEMBAYARAN_SPPT B ON
+                               A.KD_PROPINSI = B.KD_PROPINSI AND
+                               A.KD_DATI2 = B.KD_DATI2 AND
+                               A.KD_KECAMATAN = B.KD_KECAMATAN AND
+                               A.KD_KELURAHAN = B.KD_KELURAHAN AND
+                               A.KD_BLOK = B.KD_BLOK AND
+                               A.NO_URUT = B.NO_URUT AND
+                               A.KD_JNS_OP = B.KD_JNS_OP AND
+                               A.THN_PAJAK_SPPT = B.THN_PAJAK_SPPT
+WHERE A.STATUS_PEMBAYARAN_SPPT = '0'
+ORDER BY A.KD_PROPINSI, A.KD_DATI2, A.KD_KECAMATAN, A.KD_KELURAHAN, A.KD_BLOK, A.NO_URUT, A.KD_JNS_OP, A.THN_PAJAK_SPPT DESC
+;
+
+SELECT A.THN_PAJAK_SPPT, count(a.THN_PAJAK_SPPT) AS JumlahSPPTTercatatBelumLunas
+FROM SPPT A
+INNER JOIN PEMBAYARAN_SPPT B ON
+                               A.KD_PROPINSI = B.KD_PROPINSI AND
+                               A.KD_DATI2 = B.KD_DATI2 AND
+                               A.KD_KECAMATAN = B.KD_KECAMATAN AND
+                               A.KD_KELURAHAN = B.KD_KELURAHAN AND
+                               A.KD_BLOK = B.KD_BLOK AND
+                               A.NO_URUT = B.NO_URUT AND
+                               A.KD_JNS_OP = B.KD_JNS_OP AND
+                               A.THN_PAJAK_SPPT = B.THN_PAJAK_SPPT
+WHERE A.STATUS_PEMBAYARAN_SPPT = '0'
+GROUP BY A.THN_PAJAK_SPPT
+ORDER BY A.THN_PAJAK_SPPT DESC
+;
