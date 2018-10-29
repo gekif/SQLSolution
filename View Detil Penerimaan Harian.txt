@@ -1,0 +1,78 @@
+/*
+No
+Distrik
+Kelurahan
+NOP PBB
+Nama Wajib Pajak
+Tahun Pajak
+Pokok Pajak
+Denda
+Jumlah Tunggakan
+Jumlah Bayar
+Waktu pembayaran
+Tempat Pembayaran
+ */
+
+SELECT c.nm_kecamatan as Distrik, b.nm_kelurahan as Kelurahan, concat(a.kd_propinsi, '.', a.kd_dati2, '.', a.kd_kecamatan, '.', a.kd_kelurahan, '.', a.kd_blok, '-', a.no_urut, '.', a.kd_jns_op ) as nop_pbb,
+  d.nm_wp_sppt as nama_wajib_pajak,
+  a.thn_pajak_sppt as thn_pajak,
+  d.pbb_yg_harus_dibayar_sppt as pokok_pajak,
+  a.denda_sppt,
+  d.pbb_yg_harus_dibayar_sppt + a.denda_sppt
+    as jumlah_tunggakan,
+  a.jml_sppt_yg_dibayar as jumlah_bayar,
+  trim(to_char(a.createdtime, 'DD-MM-YYYY')) as tanggal_pembayaran,
+  trim(to_char(a.createdtime, 'HH:MM:SS')) as jam_pembayaran,
+  e.nm_tp as tempat_pembayaran
+FROM pembayaran_sppt a
+INNER JOIN ref_kelurahan b
+  on a.kd_propinsi = b.kd_propinsi AND a.kd_dati2 = b.kd_dati2 and a.kd_kecamatan = b.kd_kecamatan and a.kd_kelurahan = b.kd_kelurahan
+INNER JOIN ref_kecamatan c
+    on b.kd_propinsi = c.kd_propinsi AND b.kd_dati2 = c.kd_dati2 and b.kd_kecamatan = c.kd_kecamatan
+INNER JOIN sppt d
+  ON a.kd_propinsi = d.kd_propinsi AND
+     a.kd_dati2 = d.kd_dati2 AND
+     a.kd_kecamatan = d.kd_kecamatan AND
+     a.kd_kelurahan = d.kd_kelurahan AND
+     a.kd_blok = d.kd_blok AND
+     a.no_urut = d.no_urut AND
+     a.kd_jns_op = d.kd_jns_op AND
+     a.thn_pajak_sppt = d.thn_pajak_sppt
+INNER JOIN tempat_pembayaran e ON
+    a.kd_tp = e.kd_tp
+WHERE d.status_pembayaran_sppt = '1' and d.pbb_yg_harus_dibayar_sppt > 0
+;
+
+CREATE VIEW v_detil_penerimaan_harian AS 
+SELECT c.nm_kecamatan as Distrik, b.nm_kelurahan as Kelurahan, concat(a.kd_propinsi, '.', a.kd_dati2, '.', a.kd_kecamatan, '.', a.kd_kelurahan, '.', a.kd_blok, '-', a.no_urut, '.', a.kd_jns_op ) as nop_pbb,
+  d.nm_wp_sppt as nama_wajib_pajak,
+  a.thn_pajak_sppt as thn_pajak,
+  d.pbb_yg_harus_dibayar_sppt as pokok_pajak,
+  a.denda_sppt,
+  d.pbb_yg_harus_dibayar_sppt + a.denda_sppt
+    as jumlah_tunggakan,
+  a.jml_sppt_yg_dibayar as jumlah_bayar,
+  trim(to_char(a.createdtime, 'DD-MM-YYYY')) as tanggal_pembayaran,
+  trim(to_char(a.createdtime, 'HH:MM:SS')) as jam_pembayaran,
+  e.nm_tp as tempat_pembayaran
+FROM pembayaran_sppt a
+INNER JOIN ref_kelurahan b
+  on a.kd_propinsi = b.kd_propinsi AND a.kd_dati2 = b.kd_dati2 and a.kd_kecamatan = b.kd_kecamatan and a.kd_kelurahan = b.kd_kelurahan
+INNER JOIN ref_kecamatan c
+    on b.kd_propinsi = c.kd_propinsi AND b.kd_dati2 = c.kd_dati2 and b.kd_kecamatan = c.kd_kecamatan
+INNER JOIN sppt d
+  ON a.kd_propinsi = d.kd_propinsi AND
+     a.kd_dati2 = d.kd_dati2 AND
+     a.kd_kecamatan = d.kd_kecamatan AND
+     a.kd_kelurahan = d.kd_kelurahan AND
+     a.kd_blok = d.kd_blok AND
+     a.no_urut = d.no_urut AND
+     a.kd_jns_op = d.kd_jns_op AND
+     a.thn_pajak_sppt = d.thn_pajak_sppt
+INNER JOIN tempat_pembayaran e ON
+    a.kd_tp = e.kd_tp
+WHERE d.status_pembayaran_sppt = '1' and d.pbb_yg_harus_dibayar_sppt > 0
+;
+
+
+
