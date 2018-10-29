@@ -226,4 +226,3 @@ SELECT 50000 as pokok,
 		END as denda;
 
 SELECT extract(MONTH from age('2017-10-16','2017-06-05'));
-SELECT extract(MONTH from age('2017-10-16','2017-06-05'));
