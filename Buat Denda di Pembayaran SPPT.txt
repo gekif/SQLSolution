@@ -226,3 +226,103 @@ SELECT 50000 as pokok,
 		END as denda;
 
 SELECT extract(MONTH from age('2017-10-16','2017-06-05'));
+
+
+
+
+-- Rumus Perhitungan denda baru, dimana lewat dari sehari dihitung denda sebesar 2% per bulan
+SELECT 50000 as pokok,
+		CASE
+			WHEN extract(MONTH from age('2017-06-10', '2017-06-05')) > 23 then round(24 * 0.02 * 50000)
+			WHEN extract(MONTH from age('2017-06-10', '2017-06-05')) >= 0 then
+        CASE
+          WHEN extract(MONTH from age('2017-06-10', '2017-06-05')) >= floor(extract(MONTH from age('2017-06-10', '2017-06-05'))) THEN
+            round(floor(extract(MONTH from age('2017-06-10', '2017-06-05')))+ 1 * (0.02 * 50000))
+          ELSE round(floor(extract(MONTH from age('2017-06-10', '2017-06-05'))) * (0.02 * 50000))
+            END
+      ELSE 0
+		END as denda,
+50000 + (CASE
+			WHEN extract(MONTH from age('2017-06-10', '2017-06-05')) > 23 then round(24 * 0.02 * 50000)
+			WHEN extract(MONTH from age('2017-06-10', '2017-06-05')) >= 0 then
+        CASE
+          WHEN extract(MONTH from age('2017-06-10', '2017-06-05')) >= floor(extract(MONTH from age('2017-06-10', '2017-06-05'))) THEN
+            round(floor(extract(MONTH from age('2017-06-10', '2017-06-05')))+ 1 * (0.02 * 50000))
+          ELSE round(floor(extract(MONTH from age('2017-06-10', '2017-06-05'))) * (0.02 * 50000))
+            END
+      ELSE 0
+		END) as jumlah_tunggakan
+;
+
+SELECT round(floor(extract(MONTH from age('2017-06-06','2017-06-05')))) + 1 * (0.02 * 50000)  as jumlah_bulan;
+select floor(extract(MONTH from age('2017-06-06', '2017-06-05')));
+select round(floor(extract(MONTH from age('2017-06-06', '2017-06-05')))+ 1 * (0.02 * 50000)) ;
+SELECT 4 * 0.02 * 50000;
+
+
+
+
+--RUMUS DENDA BARU
+-- Jika Denda Berlaku setelah 1 bulan
+SELECT 50000 as pokok,
+  CASE
+    WHEN extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))
+          > 23 THEN round(24 * 0.02 * 50000)
+    WHEN extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))
+         >= 0 THEN
+      CASE
+        WHEN extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))
+             > floor(extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04')))
+          THEN
+          round(floor((extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))) + 1) * 0.02 * 50000)
+        else round(floor(extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))) * 0.02 * 50000)
+        END
+      else 0
+      END as denda,
+  50000 + (CASE
+    WHEN extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))
+          > 23 THEN round(24 * 0.02 * 50000)
+    WHEN extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))
+         >= 0 THEN
+      CASE
+        WHEN extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))
+             > floor(extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04')))
+          THEN
+          round(floor((extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))) + 1) * 0.02 * 50000)
+        else round(floor(extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))) * 0.02 * 50000)
+        END
+      else 0
+      END) as jumlah_tunggakan
+;
+
+--Jika Denda Berlaku setelah 1 hari, begitu ganti bulan baru kena denda lagi
+SELECT 50000 as pokok,
+  CASE
+    WHEN extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))
+          > 23 THEN round(24 * 0.02 * 50000)
+    WHEN extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))
+         >= 0 THEN
+      CASE
+        WHEN extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))
+             >= floor(extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04')))
+          THEN
+          round(floor((extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))) + 1) * 0.02 * 50000)
+        else round(floor(extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))) * 0.02 * 50000)
+        END
+      else 0
+      END as denda,
+  50000 + (CASE
+    WHEN extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))
+          > 23 THEN round(24 * 0.02 * 50000)
+    WHEN extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))
+         >= 0 THEN
+      CASE
+        WHEN extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))
+             >= floor(extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04')))
+          THEN
+          round(floor((extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))) + 1) * 0.02 * 50000)
+        else round(floor(extract(year from age('2017-05-05', '2017-05-04')) * 12 + extract(month from age('2017-05-05', '2017-05-04'))) * 0.02 * 50000)
+        END
+      else 0
+      END) as jumlah_tunggakan
+;
