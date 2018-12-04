@@ -13,7 +13,9 @@ Waktu pembayaran
 Tempat Pembayaran
  */
 
-SELECT c.nm_kecamatan as Distrik, b.nm_kelurahan as Kelurahan, concat(a.kd_propinsi, '.', a.kd_dati2, '.', a.kd_kecamatan, '.', a.kd_kelurahan, '.', a.kd_blok, '-', a.no_urut, '.', a.kd_jns_op ) as nop_pbb,
+SELECT c.nm_kecamatan as Distrik, 
+	   b.nm_kelurahan as Kelurahan, 
+concat(a.kd_propinsi, '.', a.kd_dati2, '.', a.kd_kecamatan, '.', a.kd_kelurahan, '.', a.kd_blok, '-', a.no_urut, '.', a.kd_jns_op ) as nop_pbb,
   d.nm_wp_sppt as nama_wajib_pajak,
   a.thn_pajak_sppt as thn_pajak,
   d.pbb_yg_harus_dibayar_sppt as pokok_pajak,
