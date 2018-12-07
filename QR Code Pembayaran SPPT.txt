@@ -1,0 +1,18 @@
+SELECT (a.kd_propinsi||'.'||a.kd_dati2||'.'||a.kd_kecamatan||'.'||a.kd_kelurahan||'.'||a.kd_blok||'-'||a.no_urut||'.'||a.kd_jns_op) as nop,
+ a.thn_pajak_sppt, a.nm_wp_sppt,
+  CASE WHEN (b.jalan_op||'-'||b.blok_kav_no_op) is null then '-' ELSE '-' end as alamat_op,
+  upper(c.nm_kelurahan) as nm_kelurahan, upper(d.nm_kecamatan) as nm_kecamatan, to_char(a.tgl_terbit_sppt, 'DD-MON-YYYY') as tgl_terbit_sppt,
+  to_char(a.tgl_jatuh_tempo_sppt, 'DD-MON-YYYY') as tgl_jatuh_tempo_sppt
+FROM SPPT a
+  INNER JOIN dat_objek_pajak b on
+    a.kd_propinsi = b.kd_propinsi AND a.kd_dati2 = b.kd_dati2 and a.kd_kecamatan = b.kd_kecamatan and a.kd_kelurahan = b.kd_kelurahan and a.kd_blok = b.kd_blok and a.no_urut = b.no_urut and a.kd_jns_op = b.kd_jns_op
+  INNER JOIN ref_kelurahan c on a.kd_kelurahan = c.kd_kelurahan and a.kd_kecamatan = c.kd_kecamatan and a.kd_dati2 = c.kd_dati2 and a.kd_propinsi = c.kd_propinsi
+  INNER JOIN ref_kecamatan d on a.kd_kecamatan = d.kd_kecamatan and a.kd_dati2 = d.kd_dati2 and a.kd_propinsi = d.kd_propinsi
+WHERE
+  a.status_pembayaran_sppt = '0' and a.kd_propinsi||a.kd_dati2||a.kd_kecamatan||a.kd_kelurahan||a.kd_blok||a.no_urut||a.kd_jns_op = $P{nop} and
+a.thn_pajak_sppt = $P{thn_pajak}
+ORDER BY a.kd_propinsi, a.kd_dati2, a.kd_kecamatan, a.kd_kelurahan, a.kd_blok, a.no_urut, a.kd_jns_op, a.nm_wp_sppt, a.thn_pajak_sppt
+
+
+Link in for creating image in jaspersoft:
+https://stackoverflow.com/questions/29786226/qr-code-integration-in-jasperreport
