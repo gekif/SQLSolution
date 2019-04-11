@@ -1,0 +1,216 @@
+/*
+Daftar ZNT dan NIR
+*/
+SELECT
+  dat_nir.thn_nir_znt,
+  dat_nir.kd_propinsi,
+  dat_nir.kd_dati2,
+  dat_nir.kd_kecamatan,
+  dat_nir.kd_kelurahan,
+  dat_nir.kd_znt,
+  dat_nir.nir
+FROM dat_nir
+WHERE thn_nir_znt = '2019' AND kd_propinsi = '72' AND kd_dati2 = '11' AND kd_kecamatan = '010'
+ORDER BY thn_nir_znt, kd_propinsi, kd_dati2, kd_kecamatan, kd_kelurahan, kd_znt;
+
+
+/*
+Daftar Tahun, NOP, Jalan, Kode ZNT dan NIR
+*/
+SELECT
+  dat_nir.thn_nir_znt,
+  dat_op_bumi.kd_propinsi || '.' || dat_op_bumi.kd_dati2 || '.' || dat_op_bumi.kd_kecamatan || '.' ||
+  dat_op_bumi.kd_kelurahan || '.' || dat_op_bumi.kd_blok || '-' || dat_op_bumi.no_urut || '.' ||
+  dat_op_bumi.kd_jns_op AS nop,
+  trim(dat_objek_pajak.jalan_op) as jalan_op,
+  dat_op_bumi.kd_znt,
+  dat_nir.nir
+FROM dat_op_bumi
+  INNER JOIN dat_objek_pajak ON
+                               dat_op_bumi.kd_propinsi = dat_objek_pajak.kd_propinsi AND
+                               dat_op_bumi.kd_dati2 = dat_objek_pajak.kd_dati2 AND
+                               dat_op_bumi.kd_kecamatan = dat_objek_pajak.kd_kecamatan AND
+                               dat_op_bumi.kd_kelurahan = dat_objek_pajak.kd_kelurahan AND
+                               dat_op_bumi.kd_blok = dat_objek_pajak.kd_blok AND
+                               dat_op_bumi.no_urut = dat_objek_pajak.no_urut AND
+                               dat_op_bumi.kd_jns_op = dat_objek_pajak.kd_jns_op
+  INNER JOIN dat_znt ON
+                       dat_op_bumi.kd_propinsi = dat_znt.kd_propinsi AND
+                       dat_op_bumi.kd_dati2 = dat_znt.kd_dati2 AND
+                       dat_op_bumi.kd_kecamatan = dat_znt.kd_kecamatan AND
+                       dat_op_bumi.kd_kelurahan = dat_znt.kd_kelurahan AND
+                       dat_op_bumi.kd_znt = dat_znt.kd_znt
+  INNER JOIN dat_nir ON
+                       dat_znt.kd_propinsi = dat_nir.kd_propinsi AND
+                       dat_znt.kd_dati2 = dat_nir.kd_dati2 AND
+                       dat_znt.kd_kecamatan = dat_nir.kd_kecamatan AND
+                       dat_znt.kd_kelurahan = dat_nir.kd_kelurahan AND
+                       dat_znt.kd_znt = dat_nir.kd_znt
+WHERE dat_nir.thn_nir_znt = '2019'
+      AND dat_nir.kd_propinsi = '72' AND dat_nir.kd_dati2 = '11' AND dat_nir.kd_kecamatan = '040' AND dat_nir.kd_kelurahan = '003'
+ORDER BY dat_nir.thn_nir_znt,dat_op_bumi.kd_propinsi, dat_op_bumi.kd_dati2, dat_op_bumi.kd_kecamatan, dat_op_bumi.kd_kelurahan,
+  dat_op_bumi.kd_blok, dat_op_bumi.no_urut, dat_op_bumi.kd_jns_op, trim(dat_objek_pajak.jalan_op), dat_op_bumi.kd_znt, dat_nir.nir
+;
+
+
+/*
+Daftar Tahun, NOP, Jalan, Kode ZNT dan NIR Versi 2
+*/
+SELECT
+  dat_nir.thn_nir_znt,
+  dat_op_bumi.kd_propinsi, dat_op_bumi.kd_dati2, dat_op_bumi.kd_kecamatan,
+  dat_op_bumi.kd_kelurahan, dat_op_bumi.kd_blok, dat_op_bumi.no_urut,
+  dat_op_bumi.kd_jns_op,
+  trim(dat_objek_pajak.jalan_op) as jalan_op,
+  dat_op_bumi.kd_znt,
+  dat_nir.nir
+FROM dat_op_bumi
+  INNER JOIN dat_objek_pajak ON
+                               dat_op_bumi.kd_propinsi = dat_objek_pajak.kd_propinsi AND
+                               dat_op_bumi.kd_dati2 = dat_objek_pajak.kd_dati2 AND
+                               dat_op_bumi.kd_kecamatan = dat_objek_pajak.kd_kecamatan AND
+                               dat_op_bumi.kd_kelurahan = dat_objek_pajak.kd_kelurahan AND
+                               dat_op_bumi.kd_blok = dat_objek_pajak.kd_blok AND
+                               dat_op_bumi.no_urut = dat_objek_pajak.no_urut AND
+                               dat_op_bumi.kd_jns_op = dat_objek_pajak.kd_jns_op
+  INNER JOIN dat_znt ON
+                       dat_op_bumi.kd_propinsi = dat_znt.kd_propinsi AND
+                       dat_op_bumi.kd_dati2 = dat_znt.kd_dati2 AND
+                       dat_op_bumi.kd_kecamatan = dat_znt.kd_kecamatan AND
+                       dat_op_bumi.kd_kelurahan = dat_znt.kd_kelurahan AND
+                       dat_op_bumi.kd_znt = dat_znt.kd_znt
+  INNER JOIN dat_nir ON
+                       dat_znt.kd_propinsi = dat_nir.kd_propinsi AND
+                       dat_znt.kd_dati2 = dat_nir.kd_dati2 AND
+                       dat_znt.kd_kecamatan = dat_nir.kd_kecamatan AND
+                       dat_znt.kd_kelurahan = dat_nir.kd_kelurahan AND
+                       dat_znt.kd_znt = dat_nir.kd_znt
+WHERE dat_nir.thn_nir_znt = '2019'
+      AND dat_nir.kd_propinsi = '72' AND dat_nir.kd_dati2 = '11' AND dat_nir.kd_kecamatan = '040' AND dat_nir.kd_kelurahan = '003'
+ORDER BY dat_nir.thn_nir_znt,dat_op_bumi.kd_propinsi, dat_op_bumi.kd_dati2, dat_op_bumi.kd_kecamatan, dat_op_bumi.kd_kelurahan,
+  dat_op_bumi.kd_blok, dat_op_bumi.no_urut, dat_op_bumi.kd_jns_op, trim(dat_objek_pajak.jalan_op), dat_op_bumi.kd_znt, dat_nir.nir
+;
+
+
+/*
+Daftar ZNT, Jalan, Nir dan Jumlah Objek Pajak
+*/
+SELECT
+  dat_op_bumi.kd_znt,
+  trim(dat_objek_pajak.jalan_op),
+  dat_nir.nir,
+  count(*)
+FROM dat_op_bumi
+  INNER JOIN dat_objek_pajak ON dat_op_bumi.kd_propinsi = dat_objek_pajak.kd_propinsi AND
+                                dat_op_bumi.kd_dati2 = dat_objek_pajak.kd_dati2 AND
+                                dat_op_bumi.kd_kecamatan = dat_objek_pajak.kd_kecamatan AND
+                                dat_op_bumi.kd_kelurahan = dat_objek_pajak.kd_kelurahan AND
+                                dat_op_bumi.kd_blok = dat_objek_pajak.kd_blok AND
+                                dat_op_bumi.no_urut = dat_objek_pajak.no_urut AND
+                                dat_op_bumi.kd_jns_op = dat_objek_pajak.kd_jns_op
+  INNER JOIN dat_nir ON dat_op_bumi.kd_propinsi = dat_nir.kd_propinsi AND
+                        dat_op_bumi.kd_dati2 = dat_nir.kd_dati2 AND
+                        dat_op_bumi.kd_kecamatan = dat_nir.kd_kecamatan AND
+                        dat_op_bumi.kd_kelurahan = dat_nir.kd_kelurahan AND
+                        dat_op_bumi.kd_znt = dat_nir.kd_znt
+WHERE dat_nir.thn_nir_znt = '2019' AND dat_op_bumi.kd_propinsi = '72' AND dat_op_bumi.kd_dati2 = '11' AND
+      dat_op_bumi.kd_kecamatan = '040' AND dat_objek_pajak.jalan_op LIKE '%MAM%'
+GROUP BY dat_op_bumi.kd_znt, trim(dat_objek_pajak.jalan_op), dat_nir.nir
+ORDER BY kd_znt, trim(dat_objek_pajak.jalan_op), dat_nir.nir;
+
+WITH dop AS (
+    SELECT
+      dat_objek_pajak.kd_propinsi,
+      dat_objek_pajak.kd_dati2,
+      dat_objek_pajak.kd_kecamatan,
+      dat_objek_pajak.kd_kelurahan,
+      dat_objek_pajak.kd_blok,
+      dat_objek_pajak.no_urut,
+      dat_objek_pajak.kd_jns_op,
+      dat_op_bumi.kd_znt,
+      TRIM(dat_objek_pajak.jalan_op)
+    FROM dat_objek_pajak
+      INNER JOIN dat_op_bumi ON dat_objek_pajak.kd_propinsi = dat_op_bumi.kd_propinsi AND
+                                dat_objek_pajak.kd_dati2 = dat_op_bumi.kd_dati2 AND
+                                dat_objek_pajak.kd_kecamatan = dat_op_bumi.kd_kecamatan AND
+                                dat_objek_pajak.kd_kelurahan = dat_op_bumi.kd_kelurahan AND
+                                dat_objek_pajak.kd_blok = dat_op_bumi.kd_blok AND
+                                dat_objek_pajak.no_urut = dat_op_bumi.no_urut AND
+                                dat_objek_pajak.kd_jns_op = dat_op_bumi.kd_jns_op
+    WHERE TRIM(dat_objek_pajak.jalan_op) = 'MAMPALIASAN'
+          AND dat_op_bumi.kd_kecamatan = '040' AND dat_op_bumi.kd_kelurahan = '003'
+    ORDER BY dat_objek_pajak.kd_propinsi, dat_objek_pajak.kd_dati2, dat_objek_pajak.kd_kecamatan,
+      dat_objek_pajak.kd_kelurahan, dat_objek_pajak.kd_blok, dat_objek_pajak.no_urut, dat_objek_pajak.kd_jns_op
+)
+UPDATE dat_op_bumi
+SET kd_znt = 'BF' FROM dop WHERE
+  dat_op_bumi.kd_propinsi = dop.kd_propinsi AND
+  dat_op_bumi.kd_dati2 = dop.kd_dati2 AND
+  dat_op_bumi.kd_kecamatan = dop.kd_kecamatan AND
+  dat_op_bumi.kd_kelurahan = dop.kd_kelurahan AND
+  dat_op_bumi.kd_blok = dop.kd_blok AND
+  dat_op_bumi.no_urut = dop.no_urut AND
+  dat_op_bumi.kd_jns_op = dop.kd_jns_op
+;
+
+
+
+SELECT
+  dat_op_bumi.kd_znt,
+  dat_nir.nir,
+  count(*)
+FROM dat_op_bumi
+  INNER JOIN dat_nir ON dat_op_bumi.kd_propinsi = dat_nir.kd_propinsi AND
+                        dat_op_bumi.kd_dati2 = dat_nir.kd_dati2 AND
+                        dat_op_bumi.kd_kecamatan = dat_nir.kd_kecamatan AND
+                        dat_op_bumi.kd_kelurahan = dat_nir.kd_kelurahan AND
+                        dat_op_bumi.kd_znt = dat_nir.kd_znt
+WHERE dat_nir.thn_nir_znt = '2019' AND dat_op_bumi.kd_propinsi = '72' AND dat_op_bumi.kd_dati2 = '11' AND
+      dat_op_bumi.kd_kecamatan = '040'
+GROUP BY dat_op_bumi.kd_znt, dat_nir.nir
+ORDER BY kd_znt, dat_nir.nir;
+
+
+
+
+
+
+SELECT
+  trim(jalan_op),
+  count(*)
+FROM dat_objek_pajak
+WHERE
+  kd_propinsi = '72' AND kd_dati2 = '11' AND kd_kecamatan = '010'
+GROUP BY jalan_op
+ORDER BY jalan_op;
+
+SELECT kd_znt, count(*) from dat_op_bumi
+  WHERE kd_propinsi = '72' AND kd_dati2 = '11' AND kd_kecamatan = '010'
+GROUP BY kd_znt
+ORDER BY kd_znt
+;
+
+
+SELECT
+  dat_objek_pajak.kd_propinsi,
+  dat_objek_pajak.kd_dati2,
+  dat_objek_pajak.kd_kecamatan,
+  dat_objek_pajak.kd_kelurahan,
+  dat_objek_pajak.kd_blok,
+  dat_objek_pajak.no_urut,
+  dat_objek_pajak.kd_jns_op,
+  CASE
+    WHEN jalan_standard.nm_jln_standard is null THEN dat_objek_pajak.jalan_op else
+    jalan_standard.nm_jln_standard
+  END AS jalan_op
+FROM dat_objek_pajak
+  LEFT JOIN jalan_standard ON
+                              dat_objek_pajak.kd_propinsi = jalan_standard.kd_propinsi AND
+                              dat_objek_pajak.kd_dati2 = jalan_standard.kd_dati2 AND
+                              dat_objek_pajak.kd_kecamatan = jalan_standard.kd_kecamatan AND
+                              dat_objek_pajak.kd_kelurahan = jalan_standard.kd_kelurahan AND
+                              dat_objek_pajak.jalan_op = jalan_standard.nm_jln_sementara
+WHERE dat_objek_pajak.kd_kecamatan = '040' AND dat_objek_pajak.kd_kelurahan = '003'
+ORDER BY jalan_standard.nm_jln_standard
+
+

@@ -1,0 +1,491 @@
+SELECT
+  sppt_percut.kd_propinsi,
+  sppt_percut.kd_dati2,
+  sppt_percut.kd_kecamatan,
+  sppt_percut.kd_kelurahan,
+  sppt_percut.kd_blok,
+  sppt_percut.no_urut,
+  sppt_percut.kd_jns_op,
+  sppt_percut.kd_propinsi ||
+  sppt_percut.kd_dati2 ||
+  sppt_percut.kd_kecamatan ||
+  sppt_percut.kd_kelurahan ||
+  sppt_percut.kd_blok ||
+  sppt_percut.no_urut ||
+  sppt_percut.kd_jns_op        AS nop,
+  sum(pbb_yg_hrs_dibayar_sppt) AS total_pokok
+FROM sppt_percut
+  INNER JOIN nop_percut ON
+                          sppt_percut.kd_propinsi = nop_percut.kd_propinsi AND
+                          sppt_percut.kd_dati2 = nop_percut.kd_dati2 AND
+                          sppt_percut.kd_kecamatan = nop_percut.kd_kecamatan AND
+                          sppt_percut.kd_kelurahan = nop_percut.kd_kelurahan AND
+                          sppt_percut.kd_blok = nop_percut.kd_blok AND
+                          sppt_percut.no_urut = nop_percut.no_urut AND
+                          sppt_percut.kd_jnsa_op = nop_percut.kd_jns_op
+WHERE sppt_percut.thn_pajak_sppt BETWEEN '1994' AND '2017' AND status_pembayaran_sppt = '0' AND
+      sppt_percut.kd_propinsi || sppt_percut.kd_dati2 || sppt_percut.kd_kecamatan || sppt_percut.kd_kelurahan ||
+      sppt_percut.kd_blok || sppt_percut.no_urut || sppt_percut.kd_jns_op = '121026000801100080'
+GROUP BY
+  sppt_percut.kd_propinsi,
+  sppt_percut.kd_dati2,
+  sppt_percut.kd_kecamatan,
+  sppt_percut.kd_kelurahan,
+  sppt_percut.kd_blok,
+  sppt_percut.no_urut,
+  sppt_percut.kd_jns_op
+ORDER BY
+  sppt_percut.kd_propinsi,
+  sppt_percut.kd_dati2,
+  sppt_percut.kd_kecamatan,
+  sppt_percut.kd_kelurahan,
+  sppt_percut.kd_blok,
+  sppt_percut.no_urut,
+  sppt_percut.kd_jns_op
+;
+
+
+
+
+SELECT
+  sppt_percut.kd_propinsi,
+  sppt_percut.kd_dati2,
+  sppt_percut.kd_kecamatan,
+  sppt_percut.kd_kelurahan,
+  sppt_percut.kd_blok,
+  sppt_percut.no_urut,
+  sppt_percut.kd_jns_op,
+  sppt_percut.kd_propinsi ||
+  sppt_percut.kd_dati2 ||
+  sppt_percut.kd_kecamatan ||
+  sppt_percut.kd_kelurahan ||
+  sppt_percut.kd_blok ||
+  sppt_percut.no_urut ||
+  sppt_percut.kd_jns_op AS nop,
+--   sppt_percut.thn_pajak_sppt,
+  --   sppt_percut.pbb_terhutang_sppt,
+  --   sppt_percut.faktor_pengurang_sppt,
+  sppt_percut.pbb_yg_hrs_dibayar_sppt
+--   sppt_percut.status_pembayaran_sppt
+FROM sppt_percut
+  INNER JOIN nop_percut ON
+                          sppt_percut.kd_propinsi = nop_percut.kd_propinsi AND
+                          sppt_percut.kd_dati2 = nop_percut.kd_dati2 AND
+                          sppt_percut.kd_kecamatan = nop_percut.kd_kecamatan AND
+                          sppt_percut.kd_kelurahan = nop_percut.kd_kelurahan AND
+                          sppt_percut.kd_blok = nop_percut.kd_blok AND
+                          sppt_percut.no_urut = nop_percut.no_urut AND
+                          sppt_percut.kd_jns_op = nop_percut.kd_jns_op
+WHERE
+--   sppt_percut.thn_pajak_sppt BETWEEN '1994' AND '2017'
+  sppt_percut.thn_pajak_sppt = '2018'
+      AND sppt_percut.status_pembayaran_sppt = '0'
+--       AND
+--       sppt_percut.kd_propinsi || sppt_percut.kd_dati2 || sppt_percut.kd_kecamatan || sppt_percut.kd_kelurahan ||
+--       sppt_percut.kd_blok || sppt_percut.no_urut || sppt_percut.kd_jns_op = '121026000101301470'
+ORDER BY
+  sppt_percut.kd_propinsi,
+  sppt_percut.kd_dati2,
+  sppt_percut.kd_kecamatan,
+  sppt_percut.kd_kelurahan,
+  sppt_percut.kd_blok,
+  sppt_percut.no_urut,
+  sppt_percut.kd_jns_op,
+  sppt_percut.thn_pajak_sppt
+;
+
+
+
+
+SELECT
+  pembayaran_sppt.kd_propinsi,
+  pembayaran_sppt.kd_dati2,
+  pembayaran_sppt.kd_kecamatan,
+  pembayaran_sppt.kd_kelurahan,
+  pembayaran_sppt.kd_blok,
+  pembayaran_sppt.no_urut,
+  pembayaran_sppt.kd_jns_op,
+  pembayaran_sppt.thn_pajak_sppt,
+  pembayaran_sppt.jml_pbb_yg_dibayar,
+  pembayaran_sppt.jml_denda_sppt,
+  pembayaran_sppt.tgl_pembayaran_sppt
+FROM pembayaran_sppt
+  INNER JOIN kategori_op_arsip ON
+                          pembayaran_sppt.kd_propinsi = kategori_op_arsip.kd_propinsi AND
+                          pembayaran_sppt.kd_dati2 = kategori_op_arsip.kd_dati2 AND
+                          pembayaran_sppt.kd_kecamatan = kategori_op_arsip.kd_kecamatan AND
+                          pembayaran_sppt.kd_kelurahan = kategori_op_arsip.kd_kelurahan AND
+                          pembayaran_sppt.kd_blok = kategori_op_arsip.kd_blok AND
+                          pembayaran_sppt.no_urut = kategori_op_arsip.no_urut AND
+                          pembayaran_sppt.kd_jns_op = kategori_op_arsip.kd_jns_op
+WHERE
+  kategori_op_arsip.kat_op_verval_1 = 'K1' AND pembayaran_sppt.tgl_pembayaran_sppt BETWEEN to_date('01-01-2018', 'DD-MM-YYYY') AND to_date('31-12-2018', 'DD-MM-YYYY')
+  AND pembayaran_sppt.kd_kecamatan = '260'
+ORDER BY
+  pembayaran_sppt.tgl_pembayaran_sppt,
+   pembayaran_sppt.kd_propinsi,
+  pembayaran_sppt.kd_dati2,
+  pembayaran_sppt.kd_kecamatan,
+  pembayaran_sppt.kd_kelurahan,
+  pembayaran_sppt.kd_blok,
+  pembayaran_sppt.no_urut,
+  pembayaran_sppt.kd_jns_op,
+  pembayaran_sppt.thn_pajak_sppt
+;
+
+
+SELECT
+  pembayaran_sppt.kd_propinsi,
+  pembayaran_sppt.kd_dati2,
+  pembayaran_sppt.kd_kecamatan,
+  pembayaran_sppt.kd_kelurahan,
+  pembayaran_sppt.kd_blok,
+  pembayaran_sppt.no_urut,
+  pembayaran_sppt.kd_jns_op,
+  pembayaran_sppt.thn_pajak_sppt,
+  pembayaran_sppt.jml_pbb_yg_dibayar,
+  pembayaran_sppt.jml_denda_sppt,
+  pembayaran_sppt.tgl_pembayaran_sppt
+FROM pembayaran_sppt
+WHERE
+  pembayaran_sppt.tgl_pembayaran_sppt BETWEEN to_date('01-01-2018', 'DD-MM-YYYY') AND to_date('31-12-2018', 'DD-MM-YYYY')
+  AND pembayaran_sppt.kd_kecamatan = '260'
+ORDER BY
+  pembayaran_sppt.tgl_pembayaran_sppt,
+  pembayaran_sppt.kd_propinsi,
+  pembayaran_sppt.kd_dati2,
+  pembayaran_sppt.kd_kecamatan,
+  pembayaran_sppt.kd_kelurahan,
+  pembayaran_sppt.kd_blok,
+  pembayaran_sppt.no_urut,
+  pembayaran_sppt.kd_jns_op,
+  pembayaran_sppt.thn_pajak_sppt
+;
+
+
+
+--oracle
+SELECT
+  A.KD_PROPINSI || '.' || A.KD_DATI2 || '.' || A.KD_KECAMATAN || '.' || A.KD_KELURAHAN || '.' || A.KD_BLOK || '-' ||
+  A.NO_URUT || '.' || A.KD_JNS_OP AS NOP,
+--   A.STATUS_PEMBAYARAN_SPPT,
+  A.THN_PAJAK_SPPT,
+  TRIM(D.NM_WP) AS NAMA_WP,
+  TRIM(C.JALAN_OP) AS ALAMAT_OP,
+--   B.TGL_REKAM_BYR_SPPT,
+  B.JML_PBB_YG_DIBAYAR,
+  B.JML_DENDA_SPPT,
+  B.TGL_PEMBAYARAN_SPPT
+FROM SPPT A
+  INNER JOIN PEMBAYARAN_SPPT B ON
+                                 A.KD_PROPINSI = B.KD_PROPINSI AND
+                                 A.KD_DATI2 = B.KD_DATI2 AND
+                                 A.KD_KECAMATAN = B.KD_KECAMATAN AND
+                                 A.KD_KELURAHAN = B.KD_KELURAHAN AND
+                                 A.KD_BLOK = B.KD_BLOK AND
+                                 A.NO_URUT = B.NO_URUT AND
+                                 A.KD_JNS_OP = B.KD_JNS_OP AND
+                                 A.THN_PAJAK_SPPT = B.THN_PAJAK_SPPT
+  INNER JOIN DAT_OBJEK_PAJAK C ON
+                                 A.KD_PROPINSI = C.KD_PROPINSI AND
+                                 A.KD_DATI2 = C.KD_DATI2 AND
+                                 A.KD_KECAMATAN = C.KD_KECAMATAN AND
+                                 A.KD_KELURAHAN = C.KD_KELURAHAN AND
+                                 A.KD_BLOK = C.KD_BLOK AND
+                                 A.NO_URUT = C.NO_URUT AND
+                                 A.KD_JNS_OP = C.KD_JNS_OP
+  INNER JOIN DAT_SUBJEK_PAJAK D ON C.SUBJEK_PAJAK_ID = D.SUBJEK_PAJAK_ID
+/*  LEFT JOIN KATEGORI_OP E ON
+                            A.KD_PROPINSI = E.KD_PROPINSI AND
+                            A.KD_DATI2 = E.KD_DATI2 AND
+                            A.KD_KECAMATAN = E.KD_KECAMATAN AND
+                            A.KD_KELURAHAN = E.KD_KELURAHAN AND
+                            A.KD_BLOK = E.KD_BLOK AND
+                            A.NO_URUT = E.NO_URUT AND
+                            A.KD_JNS_OP = E.KD_JNS_OP*/
+WHERE A.STATUS_PEMBAYARAN_SPPT = '0'
+ORDER BY A.KD_PROPINSI, A.KD_DATI2, A.KD_KECAMATAN, A.KD_KELURAHAN, A.KD_BLOK, A.NO_URUT, A.KD_JNS_OP,
+  A.THN_PAJAK_SPPT DESC
+;
+
+
+
+SELECT
+  IPROTAXPBB.PEMBAYARAN_SPPT.KD_KECAMATAN,
+  SUM(IPROTAXPBB.PEMBAYARAN_SPPT.JML_PBB_YG_DIBAYAR) AS TOTAL_PEMBAYARAN
+FROM IPROTAXPBB.PEMBAYARAN_SPPT
+  INNER JOIN IPROTAXPBB.KATEGORI_OP ON
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.KD_PROPINSI = IPROTAXPBB.KATEGORI_OP.KD_PROPINSI AND
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.KD_DATI2 = IPROTAXPBB.KATEGORI_OP.KD_DATI2 AND
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.KD_KECAMATAN = IPROTAXPBB.KATEGORI_OP.KD_KECAMATAN AND
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.KD_KELURAHAN = IPROTAXPBB.KATEGORI_OP.KD_KELURAHAN AND
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.KD_BLOK = IPROTAXPBB.KATEGORI_OP.KD_BLOK AND
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.NO_URUT = IPROTAXPBB.KATEGORI_OP.NO_URUT AND
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.KD_JNS_OP = IPROTAXPBB.KATEGORI_OP.KD_JNS_OP
+WHERE
+  IPROTAXPBB.PEMBAYARAN_SPPT.TGL_PEMBAYARAN_SPPT BETWEEN TO_DATE('01-01-2018', 'DD-MM-YYYY') AND TO_DATE('31-12-2018','DD-MM-YYYY')
+  AND
+  IPROTAXPBB.KATEGORI_OP.KAT_OP_VERVAL_1 = 'K1' AND IPROTAXPBB.KATEGORI_OP.KAT_OP = 'K1'
+GROUP BY
+  IPROTAXPBB.PEMBAYARAN_SPPT.KD_KECAMATAN
+ORDER BY
+  IPROTAXPBB.PEMBAYARAN_SPPT.KD_KECAMATAN
+;
+
+
+
+SELECT
+  IPROTAXPBB.PEMBAYARAN_SPPT.KD_PROPINSI,
+  IPROTAXPBB.PEMBAYARAN_SPPT.KD_DATI2,
+  IPROTAXPBB.PEMBAYARAN_SPPT.KD_KECAMATAN,
+  IPROTAXPBB.PEMBAYARAN_SPPT.KD_KELURAHAN,
+  IPROTAXPBB.PEMBAYARAN_SPPT.KD_BLOK,
+  IPROTAXPBB.PEMBAYARAN_SPPT.NO_URUT,
+  IPROTAXPBB.PEMBAYARAN_SPPT.KD_JNS_OP,
+  IPROTAXPBB.PEMBAYARAN_SPPT.THN_PAJAK_SPPT,
+  IPROTAXPBB.PEMBAYARAN_SPPT.JML_PBB_YG_DIBAYAR,
+  IPROTAXPBB.PEMBAYARAN_SPPT.JML_DENDA_SPPT,
+  IPROTAXPBB.PEMBAYARAN_SPPT.JML_PBB_YG_DIBAYAR +
+  IPROTAXPBB.PEMBAYARAN_SPPT.JML_DENDA_SPPT AS TOTAL_PEMBAYARAN,
+  IPROTAXPBB.PEMBAYARAN_SPPT.TGL_PEMBAYARAN_SPPT
+FROM IPROTAXPBB.PEMBAYARAN_SPPT
+  INNER JOIN IPROTAXPBB.KATEGORI_OP ON
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.KD_PROPINSI = IPROTAXPBB.KATEGORI_OP.KD_PROPINSI AND
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.KD_DATI2 = IPROTAXPBB.KATEGORI_OP.KD_DATI2 AND
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.KD_KECAMATAN = IPROTAXPBB.KATEGORI_OP.KD_KECAMATAN AND
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.KD_KELURAHAN = IPROTAXPBB.KATEGORI_OP.KD_KELURAHAN AND
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.KD_BLOK = IPROTAXPBB.KATEGORI_OP.KD_BLOK AND
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.NO_URUT = IPROTAXPBB.KATEGORI_OP.NO_URUT AND
+                                      IPROTAXPBB.PEMBAYARAN_SPPT.KD_JNS_OP = IPROTAXPBB.KATEGORI_OP.KD_JNS_OP
+WHERE
+  IPROTAXPBB.PEMBAYARAN_SPPT.TGL_PEMBAYARAN_SPPT BETWEEN TO_DATE('01-01-2018', 'DD-MM-YYYY') AND TO_DATE('31-12-2018','DD-MM-YYYY')
+  AND
+  IPROTAXPBB.KATEGORI_OP.KAT_OP_VERVAL_1 = 'K1' AND IPROTAXPBB.KATEGORI_OP.KAT_OP = 'K1'
+ORDER BY
+    IPROTAXPBB.PEMBAYARAN_SPPT.TGL_PEMBAYARAN_SPPT,
+    IPROTAXPBB.PEMBAYARAN_SPPT.KD_PROPINSI,
+    IPROTAXPBB.PEMBAYARAN_SPPT.KD_DATI2,
+    IPROTAXPBB.PEMBAYARAN_SPPT.KD_KECAMATAN,
+    IPROTAXPBB.PEMBAYARAN_SPPT.KD_KELURAHAN,
+    IPROTAXPBB.PEMBAYARAN_SPPT.KD_BLOK,
+    IPROTAXPBB.PEMBAYARAN_SPPT.NO_URUT,
+    IPROTAXPBB.PEMBAYARAN_SPPT.KD_JNS_OP,
+    IPROTAXPBB.PEMBAYARAN_SPPT.THN_PAJAK_SPPT
+  ;
+
+
+  
+  CREATE VIEW piutang_verval AS SELECT sppt.kd_propinsi,
+    sppt.kd_dati2,
+    sppt.kd_kecamatan,
+    sppt.kd_kelurahan,
+    sppt.kd_blok,
+    sppt.no_urut,
+    sppt.kd_jns_op,
+    (((((((((((((sppt.kd_propinsi)::text || '.'::text) || (sppt.kd_dati2)::text) || '.'::text) || (sppt.kd_kecamatan)::text) || '.'::text) || (sppt.kd_kelurahan)::text) || '.'::text) || (sppt.kd_blok)::text) || '-'::text) || (sppt.no_urut)::text) || '.'::text) || (sppt.kd_jns_op)::text) AS nop,
+    sppt.nm_wp_sppt,
+    sppt.jln_op_sppt,
+    kategori_op.kat_op_verval_1,
+    kategori_op.kat_op,
+    kategori_op.petugas,
+    sppt.thn_pajak_sppt,
+    sppt.pbb_yg_hrs_dibayar_sppt
+   FROM (sppt
+     LEFT JOIN kategori_op ON (((sppt.kd_propinsi = kategori_op.kd_propinsi) AND (sppt.kd_dati2 = kategori_op.kd_dati2) AND (sppt.kd_kecamatan = kategori_op.kd_kecamatan) AND (sppt.kd_kelurahan = kategori_op.kd_kelurahan) AND (sppt.kd_blok = kategori_op.kd_blok) AND (sppt.no_urut = kategori_op.no_urut) AND (sppt.kd_jns_op = kategori_op.kd_jns_op))))
+  ORDER BY sppt.kd_propinsi, sppt.kd_dati2, sppt.kd_kecamatan, sppt.kd_kelurahan, sppt.kd_blok, sppt.no_urut, sppt.kd_jns_op, sppt.thn_pajak_sppt;
+
+  
+  
+  -- CREATE VIEW piutang_verval_bpk AS 
+SELECT
+    ref_kecamatan.kd_kecamatan||'-'||ref_kecamatan.nm_kecamatan as nm_kecamatan,
+    ref_kelurahan.kd_kelurahan||'-'||ref_kelurahan.nm_kelurahan as nm_kelurahan,
+    sppt.thn_pajak_sppt,
+    sppt.kd_propinsi || '.' || sppt.kd_dati2 || '.' || sppt.kd_kecamatan || '.' || sppt.kd_kelurahan || '.' ||
+    sppt.kd_blok || '-' || sppt.no_urut || '.' || sppt.kd_jns_op AS nop,
+    sppt.nm_wp_sppt as nama_wp,
+    sppt.jln_op_sppt as alamat_op,
+    sppt.pbb_yg_hrs_dibayar_sppt AS pbb_terhutang_sppt,
+    kategori_op.kat_op_verval_1 as kat_verval_1,
+    kategori_op.kat_op as kat_verval_2,
+    kategori_op.petugas
+FROM sppt
+    INNER JOIN ref_kelurahan ON
+        sppt.kd_propinsi = ref_kelurahan.kd_propinsi AND
+        sppt.kd_dati2 = ref_kelurahan.kd_dati2 AND
+        sppt.kd_kecamatan = ref_kelurahan.kd_kecamatan AND
+        sppt.kd_kelurahan = ref_kelurahan.kd_kelurahan
+    INNER JOIN ref_kecamatan ON
+        sppt.kd_propinsi = ref_kecamatan.kd_propinsi AND
+        sppt.kd_dati2 = ref_kecamatan.kd_dati2 AND
+        sppt.kd_kecamatan = ref_kecamatan.kd_kecamatan
+    LEFT JOIN kategori_op ON sppt.kd_propinsi = kategori_op.kd_propinsi AND
+                             sppt.kd_dati2 = kategori_op.kd_dati2 AND
+                             sppt.kd_kecamatan = kategori_op.kd_kecamatan AND
+                             sppt.kd_kelurahan = kategori_op.kd_kelurahan AND
+                             sppt.kd_blok = kategori_op.kd_blok AND
+                             sppt.no_urut = kategori_op.no_urut AND
+                             sppt.kd_jns_op = kategori_op.kd_jns_op
+  ORDER BY sppt.kd_propinsi, sppt.kd_dati2, sppt.kd_kecamatan, sppt.kd_kelurahan, sppt.kd_blok, sppt.no_urut, sppt.kd_jns_op, sppt.thn_pajak_sppt;
+
+
+CREATE VIEW penerimaan_verval_detil AS 
+SELECT
+	pembayaran_sppt.kd_propinsi,
+	pembayaran_sppt.kd_dati2,
+	pembayaran_sppt.kd_kecamatan,
+	pembayaran_sppt.kd_kelurahan,
+	pembayaran_sppt.kd_blok,
+	pembayaran_sppt.no_urut,
+	pembayaran_sppt.kd_jns_op,
+	pembayaran_sppt.kd_propinsi||'.'||
+	pembayaran_sppt.kd_dati2||'.'||
+	pembayaran_sppt.kd_kecamatan||'.'||
+	pembayaran_sppt.kd_kelurahan||'.'||
+	pembayaran_sppt.kd_blok||'-'||
+	pembayaran_sppt.no_urut||'.'||
+	pembayaran_sppt.kd_jns_op
+	as nop,
+	pembayaran_sppt.thn_pajak_sppt,
+	pembayaran_sppt.jml_pbb_yg_dibayar,
+	pembayaran_sppt.jml_denda_sppt,
+	pembayaran_sppt.jml_pbb_yg_dibayar + pembayaran_sppt.jml_denda_sppt as total_pembayaran,
+	pembayaran_sppt.tgl_pembayaran_sppt,
+	kategori_op.kat_op_verval_1,
+	kategori_op.kat_op,
+	kategori_op.petugas
+FROM pembayaran_sppt
+	INNER JOIN kategori_op ON
+		pembayaran_sppt.kd_propinsi = kategori_op.kd_propinsi AND
+		pembayaran_sppt.kd_dati2 = kategori_op.kd_dati2 AND
+		pembayaran_sppt.kd_kecamatan = kategori_op.kd_kecamatan AND
+		pembayaran_sppt.kd_kelurahan = kategori_op.kd_kelurahan AND
+		pembayaran_sppt.kd_blok = kategori_op.kd_blok AND
+		pembayaran_sppt.no_urut = kategori_op.no_urut AND
+		pembayaran_sppt.kd_jns_op = kategori_op.kd_jns_op
+ORDER BY
+	pembayaran_sppt.kd_propinsi,
+	pembayaran_sppt.kd_dati2,
+	pembayaran_sppt.kd_kecamatan,
+	pembayaran_sppt.kd_kelurahan,
+	pembayaran_sppt.kd_blok,
+	pembayaran_sppt.no_urut,
+	pembayaran_sppt.kd_jns_op,
+	pembayaran_sppt.thn_pajak_sppt
+;
+
+
+CREATE VIEW penerimaan_verval_bpk
+-- CREATE VIEW penerimaan_verval_bpk_arsip
+AS
+  SELECT
+    TO_CHAR(pembayaran_sppt.tgl_pembayaran_sppt, 'DD-MM-YYYY')          AS tgl_pembayaran_sppt,
+    TO_CHAR(pembayaran_sppt.tgl_rekam_byr_sppt, 'DD-MM-YYYY')          AS tgl_rekam_byr_sppt,
+    ref_kecamatan.kd_kecamatan || '-' || ref_kecamatan.nm_kecamatan AS nm_kecamatan,
+    ref_kelurahan.kd_kelurahan || '-' || ref_kelurahan.nm_kelurahan AS nm_kelurahan,
+    pembayaran_sppt.thn_pajak_sppt,
+    pembayaran_sppt.kd_propinsi || '.' || pembayaran_sppt.kd_dati2 || '.' || pembayaran_sppt.kd_kecamatan || '.' ||
+    pembayaran_sppt.kd_kelurahan || '.' || pembayaran_sppt.kd_blok || '-' || pembayaran_sppt.no_urut || '.' ||
+    pembayaran_sppt.kd_jns_op                                           AS nop,
+    pembayaran_sppt.jml_pbb_yg_dibayar                                  AS jml_pokok_sppt,
+    pembayaran_sppt.jml_denda_sppt,
+    pembayaran_sppt.jml_pbb_yg_dibayar + pembayaran_sppt.jml_denda_sppt AS jml_pbb_yg_dibayar,
+    kategori_op.kat_op_verval_1,
+    kategori_op.kat_op,
+    kategori_op.petugas
+  FROM pembayaran_sppt
+    INNER JOIN ref_kelurahan ON
+                               pembayaran_sppt.kd_propinsi = ref_kelurahan.kd_propinsi AND
+                               pembayaran_sppt.kd_dati2 = ref_kelurahan.kd_dati2 AND
+                               pembayaran_sppt.kd_kecamatan = ref_kelurahan.kd_kecamatan AND
+                               pembayaran_sppt.kd_kelurahan = ref_kelurahan.kd_kelurahan
+    INNER JOIN ref_kecamatan ON
+                               pembayaran_sppt.kd_propinsi = ref_kecamatan.kd_propinsi AND
+                               pembayaran_sppt.kd_dati2 = ref_kecamatan.kd_dati2 AND
+                               pembayaran_sppt.kd_kecamatan = ref_kecamatan.kd_kecamatan
+    LEFT JOIN kategori_op ON
+                                   pembayaran_sppt.kd_propinsi = kategori_op.kd_propinsi AND
+                                   pembayaran_sppt.kd_dati2 = kategori_op.kd_dati2 AND
+                                   pembayaran_sppt.kd_kecamatan = kategori_op.kd_kecamatan AND
+                                   pembayaran_sppt.kd_kelurahan = kategori_op.kd_kelurahan AND
+                                   pembayaran_sppt.kd_blok = kategori_op.kd_blok AND
+                                   pembayaran_sppt.no_urut = kategori_op.no_urut AND
+                                   pembayaran_sppt.kd_jns_op = kategori_op.kd_jns_op
+  WHERE
+    kategori_op.kat_op_verval_1 IN ('K1', 'K2', 'K3', 'K5')
+  ORDER BY
+    pembayaran_sppt.tgl_pembayaran_sppt, pembayaran_sppt.tgl_rekam_byr_sppt,
+    pembayaran_sppt.kd_propinsi,
+    pembayaran_sppt.kd_dati2,
+    pembayaran_sppt.kd_kecamatan,
+    pembayaran_sppt.kd_kelurahan,
+    pembayaran_sppt.kd_blok,
+    pembayaran_sppt.no_urut,
+    pembayaran_sppt.kd_jns_op,
+    pembayaran_sppt.thn_pajak_sppt;
+
+
+
+
+WITH pembayaran as (
+  SELECT
+  pembayaran_sppt.kd_propinsi,
+  pembayaran_sppt.kd_dati2,
+  pembayaran_sppt.kd_kecamatan,
+                 pembayaran_sppt.kd_kelurahan,
+                 pembayaran_sppt.kd_blok,
+  pembayaran_sppt.no_urut,
+  pembayaran_sppt.kd_jns_op
+  FROM pembayaran_sppt
+  INNER JOIN kategori_op ON
+  pembayaran_sppt.kd_propinsi = kategori_op.kd_propinsi AND
+                                            pembayaran_sppt.kd_dati2 = kategori_op.kd_dati2 AND
+  pembayaran_sppt.kd_kecamatan = kategori_op.kd_kecamatan AND
+  pembayaran_sppt.kd_kelurahan = kategori_op.kd_kelurahan AND
+                  pembayaran_sppt.kd_blok = kategori_op.kd_blok AND
+                                            pembayaran_sppt.no_urut = kategori_op.no_urut AND
+                                                                                  pembayaran_sppt.kd_jns_op = kategori_op.kd_jns_op
+                                                                                  WHERE
+  pembayaran_sppt.tgl_pembayaran_sppt BETWEEN to_date('01-01-2018', 'DD-MM-YYYY') AND to_date('31-12-2018', 'DD-MM-YYYY')
+  AND
+  pembayaran_sppt.tgl_rekam_byr_sppt BETWEEN to_date('01-01-2018', 'DD-MM-YYYY') AND to_date('31-12-2018', 'DD-MM-YYYY')
+  AND kategori_op.kat_op_verval_1 IN ('K1', 'K2', 'K3', 'K5')
+  ORDER BY
+  pembayaran_sppt.tgl_pembayaran_sppt,
+  pembayaran_sppt.kd_propinsi,
+  pembayaran_sppt.kd_dati2,
+  pembayaran_sppt.kd_kecamatan,
+  pembayaran_sppt.kd_kelurahan,
+                  pembayaran_sppt.kd_blok,
+                  pembayaran_sppt.no_urut,
+  pembayaran_sppt.kd_jns_op
+)
+UPDATE kategori_op SET kat_op = 'K4' FROM pembayaran WHERE
+kategori_op.kd_propinsi = pembayaran.kd_propinsi AND
+kategori_op.kd_dati2 = pembayaran.kd_dati2 AND
+kategori_op.kd_kecamatan = pembayaran.kd_kecamatan AND
+kategori_op.kd_kelurahan = pembayaran.kd_kelurahan AND
+kategori_op.kd_blok = pembayaran.kd_blok AND
+kategori_op.no_urut = pembayaran.no_urut AND
+kategori_op.kd_jns_op = pembayaran.kd_jns_op
+
+
+
+SELECT * FROM penerimaan_verval_detil_arsip
+WHERE kat_op_verval_1 IN ('K1', 'K2', 'K3', 'K5') AND kat_op IN ('K1', 'K2', 'K3', 'K5')
+;
+
+SELECT * FROM penerimaan_verval_bpk_arsip
+WHERE kat_op_verval_1 IN ('K1', 'K2', 'K3', 'K5') AND kat_op IN ('K1', 'K2', 'K3', 'K5')
+;
+
+
+SELECT * FROM penerimaan_verval_detil_arsip
+-- WHERE tgl_pembayaran_sppt BETWEEN to_date('01-01-2012', 'DD-MM-YYYY') AND to_date('31-12-2015', 'DD-MM-YYYY')
+WHERE tgl_pembayaran_sppt BETWEEN to_date('01-01-2016', 'DD-MM-YYYY') AND to_date('31-12-2018', 'DD-MM-YYYY')
+ORDER BY tgl_pembayaran_sppt
+;
+
+SELECT * FROM penerimaan_verval_bpk_arsip
+;
+

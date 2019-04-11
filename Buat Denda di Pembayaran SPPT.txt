@@ -326,3 +326,89 @@ SELECT 50000 as pokok,
       else 0
       END) as jumlah_tunggakan
 ;
+
+IMPLEMENTASI SISMIOP NG
+
+CASE
+    WHEN extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))
+          > 23 THEN round(24 * 0.02 * )
+    WHEN extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))
+         >= 0 THEN
+      CASE
+        WHEN extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))
+             >= floor(extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)))
+          THEN
+          round(floor((extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))) + 1) * 0.02 * sppt.pbb_yg_harus_dibayar_sppt)
+        else round(floor(extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))) * 0.02 * sppt.pbb_yg_harus_dibayar_sppt)
+        END
+      else 0
+      END as denda_sppt
+	  
+	  
+-- List Pembayaran SPPT
+SELECT
+  concat(sppt.kd_propinsi, '.', sppt.kd_dati2, '.', sppt.kd_kecamatan, '.', sppt.kd_kelurahan, '.', sppt.kd_blok, '-',
+         sppt.no_urut, '.', sppt.kd_jns_op) as nop,
+  sppt.thn_pajak_sppt,
+  sppt.pbb_yg_harus_dibayar_sppt as pokok_sppt,
+CASE
+    WHEN extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))
+          > 23 THEN round(24 * 0.02 * sppt.pbb_yg_harus_dibayar_sppt)
+    WHEN extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))
+         >= 0 THEN
+      CASE
+        WHEN extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))
+             >= floor(extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)))
+          THEN
+          round(floor((extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))) + 1) * 0.02 * sppt.pbb_yg_harus_dibayar_sppt)
+        else round(floor(extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))) * 0.02 * sppt.pbb_yg_harus_dibayar_sppt)
+        END
+      else 0
+      END as denda_sppt,
+  (sppt.pbb_yg_harus_dibayar_sppt + CASE
+    WHEN extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))
+          > 23 THEN round(24 * 0.02 * sppt.pbb_yg_harus_dibayar_sppt)
+    WHEN extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))
+         >= 0 THEN
+      CASE
+        WHEN extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))
+             >= floor(extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)))
+          THEN
+          round(floor((extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))) + 1) * 0.02 * sppt.pbb_yg_harus_dibayar_sppt)
+        else round(floor(extract(year from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt)) * 12 + extract(month from age(pembayaran_sppt.tgl_pembayaran_sppt, sppt.tgl_jatuh_tempo_sppt))) * 0.02 * sppt.pbb_yg_harus_dibayar_sppt)
+        END
+      else 0 end) as jumlah_sppt,
+  (pembayaran_sppt.jml_sppt_yg_dibayar - pembayaran_sppt.denda_sppt) AS pokok_pembayaran_sppt,
+  pembayaran_sppt.denda_sppt as denda_pembayaran_sppt,
+  pembayaran_sppt.jml_sppt_yg_dibayar as jumlah_pembayaran_sppt
+FROM pembayaran_sppt
+  INNER JOIN sppt ON
+                    pembayaran_sppt.kd_propinsi = sppt.kd_propinsi AND
+                    pembayaran_sppt.kd_dati2 = sppt.kd_dati2 AND
+                    pembayaran_sppt.kd_kecamatan = sppt.kd_kecamatan AND
+                    pembayaran_sppt.kd_kelurahan = sppt.kd_kelurahan AND
+                    pembayaran_sppt.kd_blok = sppt.kd_blok AND
+                    pembayaran_sppt.no_urut = sppt.no_urut AND
+                    pembayaran_sppt.kd_jns_op = sppt.kd_jns_op AND
+                    pembayaran_sppt.thn_pajak_sppt = sppt.thn_pajak_sppt
+WHERE pembayaran_sppt.tgl_pembayaran_sppt BETWEEN to_date('01-01-2018', 'DD-MM-YYYY') AND to_date('31-12-2018', 'DD-MM-YYYY') AND sppt.status_pembayaran_sppt = '1';
+
+
+-- Total Pembayaran SPPT
+SELECT
+  sum(sppt.pbb_yg_harus_dibayar_sppt) as jumlah_pokok_sppt,
+  sum((pembayaran_sppt.jml_sppt_yg_dibayar - pembayaran_sppt.denda_sppt)) AS jumlah_pokok_pembayaran_sppt,
+  sum(pembayaran_sppt.denda_sppt) as jumlah_denda,
+  sum(pembayaran_sppt.jml_sppt_yg_dibayar) as jumlah_sppt_yg_dibayar
+FROM pembayaran_sppt
+  INNER JOIN sppt ON
+                    pembayaran_sppt.kd_propinsi = sppt.kd_propinsi AND
+                    pembayaran_sppt.kd_dati2 = sppt.kd_dati2 AND
+                    pembayaran_sppt.kd_kecamatan = sppt.kd_kecamatan AND
+                    pembayaran_sppt.kd_kelurahan = sppt.kd_kelurahan AND
+                    pembayaran_sppt.kd_blok = sppt.kd_blok AND
+                    pembayaran_sppt.no_urut = sppt.no_urut AND
+                    pembayaran_sppt.kd_jns_op = sppt.kd_jns_op AND
+                    pembayaran_sppt.thn_pajak_sppt = sppt.thn_pajak_sppt
+WHERE pembayaran_sppt.tgl_pembayaran_sppt BETWEEN to_date('01-01-2018', 'DD-MM-YYYY') AND to_date('31-12-2018', 'DD-MM-YYYY') AND sppt.status_pembayaran_sppt = '1';
+

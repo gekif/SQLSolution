@@ -79,3 +79,32 @@ WHERE A.STATUS_PEMBAYARAN_SPPT = '0' AND B.THN_PAJAK_SPPT = '2017');
 -- MISC
 KD_PROPINSI||KD_DATI2||KD_KECAMATAN||KD_KELURAHAN||KD_BLOK||NO_URUT||KD_JNS_OP
 KD_PROPINSI||KD_DATI2||KD_KECAMATAN||KD_KELURAHAN||KD_BLOK||NO_URUT||KD_JNS_OP='121027000600302270' AND THN_PAJAK_SPPT = '2017'
+
+
+--versi postgresql
+WITH pembayaran as(
+  SELECT A.KD_PROPINSI,A.KD_DATI2,A.KD_KECAMATAN,A.KD_KELURAHAN,A.KD_BLOK, A.NO_URUT,A.KD_JNS_OP, A.thn_pajak_sppt
+FROM SPPT A
+INNER JOIN PEMBAYARAN_SPPT B ON
+                               A.KD_PROPINSI = B.KD_PROPINSI AND
+                               A.KD_DATI2 = B.KD_DATI2 AND
+                               A.KD_KECAMATAN = B.KD_KECAMATAN AND
+                               A.KD_KELURAHAN = B.KD_KELURAHAN AND
+                               A.KD_BLOK = B.KD_BLOK AND
+                               A.NO_URUT = B.NO_URUT AND
+                               A.KD_JNS_OP = B.KD_JNS_OP AND
+                               A.THN_PAJAK_SPPT = B.THN_PAJAK_SPPT
+WHERE A.STATUS_PEMBAYARAN_SPPT = '0'
+ORDER BY A.KD_PROPINSI, A.KD_DATI2, A.KD_KECAMATAN, A.KD_KELURAHAN, A.KD_BLOK, A.NO_URUT, A.KD_JNS_OP DESC
+)
+
+UPDATE sppt SET status_pembayaran_sppt = '1' FROM pembayaran
+WHERE
+  sppt.kd_propinsi = pembayaran.kd_propinsi AND
+  sppt.kd_dati2 = pembayaran.kd_dati2 AND
+  sppt.kd_kecamatan = pembayaran.kd_kecamatan AND
+  sppt.kd_kelurahan = pembayaran.kd_kelurahan AND
+  sppt.kd_blok = pembayaran.kd_blok AND
+  sppt.no_urut = pembayaran.no_urut AND
+  sppt.kd_jns_op = pembayaran.kd_jns_op AND
+  sppt.thn_pajak_sppt = pembayaran.thn_pajak_sppt
